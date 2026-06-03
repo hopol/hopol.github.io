@@ -1,0 +1,308 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>流放之地</title>
+<meta name="description" content="我像一顆棋子，被上帝抓在手中，我看到她的眼，卻聽不到她的心。" />
+<link rel="shortcut icon" href="https://hopol.cc.cd/favicon.ico?v=1582923779422">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://hopol.cc.cd/styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://hopol.cc.cd">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hopol.cc.cd/images/avatar.png?v=1582923779422" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">流放之地</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#trojan%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E8%AF%B4%E6%98%8E">trojan负载均衡说明</a></li>
+<li><a href="#trojan%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%90%AD%E5%BB%BA%E4%B8%80%E9%94%AE%E8%84%9A%E6%9C%AC">trojan负载均衡服务端搭建一键脚本</a></li>
+<li><a href="#trojan%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%8B%E8%BD%BD">trojan负载均衡客户端下载</a></li>
+<li><a href="#haproxy%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95%E4%B8%8E%E9%80%82%E5%90%88%E7%9A%84%E5%9C%BA%E6%99%AF">haproxy负载均衡算法与适合的场景</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="ri-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a></div>
+    <a class="rss" href="https://hopol.cc.cd/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">[备份]稳上加稳，trojan+haproxy本地负载均衡连接多条trojan服务端，高可用or分散流量多种模式</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-02-21 / 4 min read
+        </div>
+        
+        <div class="post-content yue">
+          <p>实验性方案，没有折腾精神的小伙伴看个热闹就好了。</p>
+<p>最近tg群里有同学谈到在openwrt中使用trojan，他讲到了一款叫做passwall的软件，看名称你就能知道它是做什么的，它是支持trojan的，同时也支持负载均衡，它的负载均衡厉害的地方在于你后端可以同时用任何代理，例如你添加了多条路线，包含ss/v2ray/trojan等，passwall可以把流量很好的转发到这些代理端，其实这也是路由器科学上网的好处。因为trojan官方已经有了openwrt版，所以最近也在想做一个trojan的openwrt luci插件，方便管理，这看看有时间做吧。</p>
+<p>这也让我想到了之前玩过的trojan+haproxy在windows PC中负载均衡的方式，简单说就是本地使用trojan客户端的流量通过haproxy负载均衡到后端的多个trojan服务端。这里就记录一下过程。</p>
+<h2 id="trojan负载均衡说明">trojan负载均衡说明</h2>
+<blockquote>
+<p>1、trojan的负载均衡主要靠配置haproxy来实现，haproxy有多种算法，我们需要里找到不同场景下最合适的算法，所以不同需求场景会有不同的配置。</p>
+<p>2、trojan的服务端需要有相同的密码配置。</p>
+</blockquote>
+<h2 id="trojan负载均衡服务端搭建一键脚本">trojan负载均衡服务端搭建一键脚本</h2>
+<p><strong>1、这个脚本在之前的基础上稍微改了一下，需要手动输入参数，支持centos7+/ubuntu16.04+/debian9+</strong></p>
+<pre><code>wget https://raw.githubusercontent.com/atrandys/trojan/master/trojan4balance.sh &amp;&amp; chmod +x trojan4balance.sh
+</code></pre>
+<p><strong>2、然后执行脚本，此时需要输入两个参数，第一个是你绑定到VPS的域名（举例：s1.atrandys.com），第二个是密码（举例：atrandys），这个密码所有负载均衡的server端都必须一样。</strong></p>
+<pre><code>./trojan4balance.sh s1.atrandys.com atrandys
+</code></pre>
+<p><strong>3、搭建完成检查是否成功，使用这个命令看到nginx进程和trojan进程就基本确认安装成功。</strong></p>
+<pre><code>ps -aux | grep -e trojan -e nginx | grep -v grep
+</code></pre>
+<h2 id="trojan负载均衡客户端下载">trojan负载均衡客户端下载</h2>
+<p><strong>1、trojan的客户端已经包含了负载均衡软件haproxy（1.7windows版，集成cygwin），你只需要下载下来即可</strong></p>
+<p>下载地址<br>
+https://github.com/atrandys/trojan/raw/master/trojan-cli-haproxy.zip</p>
+<p><strong>2、编辑客户端trojan的配置文件config.json和haproxy的配置文件haproxy.conf</strong></p>
+<p>修改config.jason，将password中的atrandys修改为你设置的密码</p>
+<figure data-type="image" tabindex="1"><img src="https://hopol.cc.cd/post-images/1582250681379.png" alt="" loading="lazy"></figure>
+<p>修改haproxy.conf，将s1.atrandys.com/s2.atrandys.com/s3.atrandys.com分别修改成你后端trojan服务器的域名，我这里是三个，如果你的数量不同自行增减行数即可。</p>
+<figure data-type="image" tabindex="2"><img src="https://hopol.cc.cd/post-images/1582250694977.png" alt="" loading="lazy"></figure>
+<h2 id="haproxy负载均衡算法与适合的场景">haproxy负载均衡算法与适合的场景</h2>
+<p><strong>1、统计与健康检测</strong></p>
+<p><strong>统计</strong></p>
+<p>你可以在本地浏览器中访问<a href="http://127.0.0.1:2080/">127.0.0.1:2080</a>，进入haproxy的统计页面，查看统计信息。</p>
+<p><strong>tcp模式健康检测</strong></p>
+<p>tcp模式的haproxy健康检测通过tcp握手检测，配置为check即可。</p>
+<p><strong>http模式健康检测</strong></p>
+<p>这个我们没用到，用了最简单的tcp模式，谷歌关键词“haproxy http健康检测”</p>
+<p>2、负载均衡算法</p>
+<p>roundrobin：简单轮询，按照权重分配，适合流量分散到不同后端，后端server访问慢的情况有点问题，待研究。</p>
+<p>source：同一访问地址固定访问同一台服务器，本机IP算是固定的，所以只会访问一台服务器，当服务器不可用时才会切换其他。</p>
+<p>待补充……</p>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hopol.cc.cd/tag/haproxy/">
+            <span class="flex-auto">haproxy</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hopol.cc.cd/tag/fu-zai-jun-heng/">
+            <span class="flex-auto">负载均衡</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hopol.cc.cd/tag/trojan/">
+            <span class="flex-auto">trojan</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+            <div class="prev-post">
+              <a href="https://hopol.cc.cd/post/tFnhE2ogD/">
+                <h3 class="post-title">
+                  <i class="ri-arrow-left-line"></i>
+                  trojan多用户配置，简单模式+使用trojan_mysql高级模式，流量管理
+                </h3>
+              </a>
+            </div>
+          
+
+          
+            <div class="next-post">
+              <a href="https://hopol.cc.cd/post/Xzfu6wkgF/">
+                <h3 class="post-title">
+                  [备份]ss v2ray等+kcptun+udp2raw，垃圾线路拯救者，避免高峰期QOS，秒开4K
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'c4a599757651e271978a',
+    clientSecret: 'bc88160b0789c4000d2c130d1ef66d8badc9c43a',
+    repo: 'hopol.github.io',
+    owner: 'hopol',
+    admin: ['hopol'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+      </div>
+    </div>
+
+    <script src="https://hopol.cc.cd/media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>

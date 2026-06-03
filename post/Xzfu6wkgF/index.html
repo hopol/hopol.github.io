@@ -1,0 +1,350 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>流放之地</title>
+<meta name="description" content="我像一顆棋子，被上帝抓在手中，我看到她的眼，卻聽不到她的心。" />
+<link rel="shortcut icon" href="https://hopol.cc.cd/favicon.ico?v=1582923779422">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://hopol.cc.cd/styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://hopol.cc.cd">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hopol.cc.cd/images/avatar.png?v=1582923779422" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">流放之地</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E8%AF%B4%E6%98%8E">说明</a></li>
+<li><a href="#%E6%90%AD%E5%BB%BA%E6%95%99%E7%A8%8B">搭建教程</a>
+<ul>
+<li><a href="#1-%E5%AE%89%E8%A3%85%E4%BB%A3%E7%90%86%E8%BD%AF%E4%BB%B6">1、安装代理软件</a></li>
+<li><a href="#2-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%AE%89%E8%A3%85kcptun%E5%92%8Cudp2raw%E5%B9%B6%E9%85%8D%E7%BD%AE">2、服务端安装kcptun和udp2raw并配置</a></li>
+<li><a href="#3-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%AE%89%E8%A3%85kcptun%E5%92%8Cudp2raw%E5%B9%B6%E9%85%8D%E7%BD%AEss%E5%AE%A2%E6%88%B7%E7%AB%AF">3、客户端安装kcptun和udp2raw并配置SS客户端</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="ri-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a></div>
+    <a class="rss" href="https://hopol.cc.cd/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">[备份]ss v2ray等+kcptun+udp2raw，垃圾线路拯救者，避免高峰期QOS，秒开4K</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-02-21 / 7 min read
+        </div>
+        
+        <div class="post-content yue">
+          <p>最近很多朋友说高峰期太卡了，其实没办法，人人憋在家里，外网访问流量自然比平时大，这时候国际出口带宽有限，就导致原本不是高峰期的时段也变成高峰期了，所以这个时候CN2 GIA线路和IPLC线路都特别火，这属于加钱享受更好的服务了，无可厚非。但对于普通用户来说，运营商是区别对待的，这就有点不公平了，我是163骨干网线路，你是GIA线路，同样高峰期，你丢包0，我丢包30%，归根到底是运营商没有那么大的带宽，承载不了国内基数如此大的网民上网需求，这就像没有金刚钻不揽瓷器活儿，你能力不足还给我QOS，那么作为用户想办法抢占一下带宽也是合情合理的。只不过对于没有使用kcptun多倍发包的用户，是不公平的，就像高速公路运输货物，你可以有多辆卡车一起运送，而其他用户只能用1辆卡车运送。话说回来，信息不对称造成的不公平处处存在，此处也就不需要矫情太多了。</p>
+<h2 id="说明">说明</h2>
+<blockquote>
+<p>1、只做代理用途，所以不要问怎么配代理游戏了，我们只管TCP</p>
+<p>2、这种方式应对QOS是有效的，但如果运营商无耻到封本地端口，那无解，只能换端口或则重启路由器/光猫</p>
+<p>3、理论上SS、v2ray等TCP代理都是可以搭配 KCPTUN和udp2raw使用</p>
+<p>4、教程手动配置，比较繁琐但不难，建议耐心细心，交流tg group: https://t.me/atrandys</p>
+<p>5、免责声明：此种方式适合有折腾精神的同学，相比trojan等或许会有相对高一点的被墙风险（有点玄学）。</p>
+</blockquote>
+<h2 id="搭建教程">搭建教程</h2>
+<h3 id="1-安装代理软件">1、安装代理软件</h3>
+<p>这里不多说了，SS或者V2ray或者其他使用TCP协议的代理都可以，自行安装，我这里使用SS</p>
+<p>下面的一键脚本是自己改过的，少了一些可配置的东西，一键到底，你使用其他的搭建方式也可以。</p>
+<pre><code>wget https://raw.githubusercontent.com/atrandys/ssr/master/ss_sin.sh &amp;&amp; chmod +x ss_sin.sh &amp;&amp; ./ss_sin.sh
+
+</code></pre>
+<p>搭建完成后，我们需要记录下来SS服务端监听的端口，例如为37212（后面配置要用），测试SS或其他代理软件正常使用，这一步测试很重要，确保无误，方便万一不能正常使用的情况我们排查问题。</p>
+<h3 id="2-服务端安装kcptun和udp2raw并配置">2、服务端安装kcptun和udp2raw并配置</h3>
+<p>两个软件在github的下载地址，贴在下面，可以自己去下载（如果你搞不清楚，直接用下面步骤的命令即可），后面我会把解压的最新版放在github，写在命令里 ，你可以直接用，无需自己下载解压。</p>
+<p><strong>kcptun</strong></p>
+<blockquote>
+<p>server：https://github.com/xtaci/kcptun/releases/download/v20200201/kcptun-linux-amd64-20200201.tar.gz</p>
+<p>client（win64）：https://github.com/xtaci/kcptun/releases/download/v20200201/kcptun-windows-amd64-20200201.tar.gz</p>
+</blockquote>
+<p><strong>udp2raw</strong></p>
+<blockquote>
+<p>server（amd64）：https://github.com/wangyu-/udp2raw-tunnel/releases/download/20190716.test.0/udp2raw_binaries.tar.gz</p>
+<p>client（win64）：https://github.com/wangyu-/udp2raw-multiplatform/releases/download/20190407.0/udp2raw_windows.zip</p>
+</blockquote>
+<p>2.1 配置udp2raw</p>
+<p>因为整个方案udp2raw是在最外层的，所以在服务端我们需要暴露udp2raw监听的端口，如果你启用了防火墙或者服务商自带防火墙，需要开放这个端口，这里我使用8080为udp2raw监听的端口，而udp2raw要指向kcptun的端口，我们这里使用9090（这些端口你要记好，后面会用到）。</p>
+<p>首先我们新建一个文件夹，用来存放我们使用的软件</p>
+<pre><code>mkdir /usr/src/kcpudp &amp;&amp; cd /usr/src/kcpudp
+
+</code></pre>
+<p>服务端下载udp2raw</p>
+<pre><code>wget https://github.com/atrandys/ssr/raw/master/src/udp2raw_amd64 &amp;&amp; wget https://raw.githubusercontent.com/atrandys/ssr/master/src/run.sh &amp;&amp; chmod +x udp2raw_amd64 run.sh
+
+</code></pre>
+<p>启用udp2raw，注意8080是udp2raw监听的端口，指向9090是kcptun监听的端口，“atrandys”你可以任意替换成其他内容，客户端和这个数值一致就可以（后面客户端配置你会看到）。</p>
+<pre><code>nohup ./run.sh ./udp2raw_amd64 -s -l0.0.0.0:8080 -r 127.0.0.1:9090 --raw-mode faketcp --cipher-mode none -a -k &quot;atrandys&quot; &gt;udp2raw.log 2&gt;&amp;1 &amp;
+
+</code></pre>
+<p>2.2 配置kcptun</p>
+<p>首先下载kcptun</p>
+<pre><code>wget https://github.com/atrandys/ssr/raw/master/src/server_linux_amd64 &amp;&amp; chmod +x server_linux_amd64
+
+</code></pre>
+<p>然后写配置文件，注意listen监听9090，这kcptun监听的端口，target为127.0.0.1:37212，这里指向的是SS的端口。</p>
+<blockquote>
+<pre><code>cat &gt; kcptun_server.json&lt;&lt;-EOF
+{
+&quot;listen&quot;: &quot;:9090&quot;,
+&quot;target&quot;: &quot;127.0.0.1:37212&quot;,
+&quot;key&quot;: &quot;atrandys&quot;,
+&quot;crypt&quot;: &quot;&quot;,
+&quot;mode&quot;: &quot;fast2&quot;,
+&quot;mtu&quot;: 1200,
+&quot;sndwnd&quot;: 1024,
+&quot;rcvwnd&quot;: 512,
+&quot;datashard&quot;: 5,
+&quot;parityshard&quot;: 1,
+&quot;dscp&quot;: 0,
+&quot;nocomp&quot;: true
+}
+EOF
+
+</code></pre>
+</blockquote>
+<p>然后运行kcptun服务端</p>
+<pre><code>nohup ./server_linux_amd64 -c ./kcptun_server.json &gt;kcptun.log 2&gt;&amp;1 &amp;
+
+</code></pre>
+<h3 id="3-客户端安装kcptun和udp2raw并配置ss客户端">3、客户端安装kcptun和udp2raw并配置SS客户端</h3>
+<p>1、下载客户端软件kcptun和udp2raw（win64）</p>
+<p>注意使用udp2raw需要你的电脑安装winpcap或者npcap</p>
+<p>下载地址：https://nmap.org/npcap/dist/npcap-0.9987.exe</p>
+<p>下载客户端，客户端存放了配置文件和软件，下载下来解压得到kcpudp文件夹</p>
+<p>下载地址：https://github.com/atrandys/ssr/raw/master/src/kcpudp.zip</p>
+<p>2、修改文件夹内参数</p>
+<p>修改start.bat把其中的服务器IP地址修改为你的实际服务器IP</p>
+<p>至于kcptun_client.json参数建议默认，不要改动。</p>
+<p>3、配置SS客户端</p>
+<p>SS客户端不适用KCPTUN和udp2raw的时候应该是可以正常使用的，我们前面说过，这时候我们只需要修改SS的客户端配置，将服务器IP改为127.0.0.1，将端口改为8888即可（这里对应kcptun_client.json中监听的端口，如果你没有改动直接使用8888即可），其他不需要改变。</p>
+<p>这时候启动文件夹的start.bat，SS客户端正常开启，测试是否OK。</p>
+<p>说明：kcptun的参数每个人的情况可能不同，你可以适当的调整，实际测试速度，找到最适合你的参数。</p>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hopol.cc.cd/tag/kcptun/">
+            <span class="flex-auto">kcptun</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hopol.cc.cd/tag/udp2raw/">
+            <span class="flex-auto">udp2raw</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hopol.cc.cd/tag/v2ray/">
+            <span class="flex-auto">v2ray</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+            <div class="prev-post">
+              <a href="https://hopol.cc.cd/post/m7PuuiW1B/">
+                <h3 class="post-title">
+                  <i class="ri-arrow-left-line"></i>
+                  [备份]稳上加稳，trojan+haproxy本地负载均衡连接多条trojan服务端，高可用or分散流量多种模式
+                </h3>
+              </a>
+            </div>
+          
+
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'c4a599757651e271978a',
+    clientSecret: 'bc88160b0789c4000d2c130d1ef66d8badc9c43a',
+    repo: 'hopol.github.io',
+    owner: 'hopol',
+    admin: ['hopol'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+      </div>
+    </div>
+
+    <script src="https://hopol.cc.cd/media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>

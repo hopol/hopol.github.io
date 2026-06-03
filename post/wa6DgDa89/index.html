@@ -1,0 +1,389 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>流放之地</title>
+<meta name="description" content="我像一顆棋子，被上帝抓在手中，我看到她的眼，卻聽不到她的心。" />
+<link rel="shortcut icon" href="https://hopol.cc.cd/favicon.ico?v=1582923779422">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://hopol.cc.cd/styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://hopol.cc.cd">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hopol.cc.cd/images/avatar.png?v=1582923779422" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">流放之地</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#openwrt-trojan%E9%80%8F%E6%98%8E%E4%BB%A3%E7%90%86%E6%96%B9%E6%A1%88">openwrt trojan透明代理方案</a><br>
+*
+<ul>
+<li><a href="#dnsmasq-full-ipset-iptables-dns-forwarder-redsocks-trojan">dnsmasq-full + ipset + iptables + dns-forwarder + redsocks + trojan</a></li>
+</ul>
+</li>
+<li><a href="#opwnert%E4%B8%8Btrojan%E9%80%8F%E6%98%8E%E4%BB%A3%E7%90%86%E6%95%99%E7%A8%8B">opwnert下trojan透明代理教程</a>
+<ul>
+<li><a href="#1-%E5%AE%89%E8%A3%85trojan%E5%BC%80%E5%90%AF%E8%BD%AC%E5%8F%91">1、安装trojan开启转发</a></li>
+<li><a href="#2-%E5%AE%89%E8%A3%85dnsmasq-full-ipset-dns-forwarder-redsocks">2、安装dnsmasq-full ipset dns-forwarder redsocks</a></li>
+<li><a href="#3-%E9%85%8D%E7%BD%AEtrojan">3、配置trojan</a></li>
+<li><a href="#4-%E9%85%8D%E7%BD%AEdns-forwarder">4、配置dns-forwarder</a></li>
+<li><a href="#5-%E9%85%8D%E7%BD%AEredsocks">5、配置redsocks</a></li>
+<li><a href="#6-%E9%85%8D%E7%BD%AEdnsmasq-ipset-iptables">6、配置dnsmasq、ipset、iptables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="ri-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a></div>
+    <a class="rss" href="https://hopol.cc.cd/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">openwrt使用trojan教程（二）：在openwrt实现trojan透明代理</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-02-29 / 5 min read
+        </div>
+        
+        <div class="post-content yue">
+          <p>openwrt上使用trojan，我们继续探索，上一篇教程在<a href="https://www.atrandys.com/2020/2324.html">openwrt上编译trojan</a>，已经可以让trojan以socks5的方式跑起来，但是我们必须在应用中指定socks5代理，总的来说不够舒服，所以透明代理应该是我们的追求。</p>
+<h2 id="openwrt-trojan透明代理方案">openwrt trojan透明代理方案</h2>
+<h4 id="dnsmasq-full-ipset-iptables-dns-forwarder-redsocks-trojan">dnsmasq-full + ipset + iptables + dns-forwarder + redsocks + trojan</h4>
+<p>透明代理绕不过的就是DNS污染问题，我们需要解决DNS污染，然后解决访问流量的代理。</p>
+<p><strong>DNS</strong></p>
+<blockquote>
+<p>这里我们用直接使用dnsmasq指定gfwlist名单中的域名使用DNS服务器8.8.8.8，然后使用dns-forwarder将DNS的UDP转为TCP，再强制访问8.8.8.8的流量被代理。</p>
+</blockquote>
+<p><strong>代理</strong></p>
+<blockquote>
+<p>我们使用dnsmasq-full和ipset，让指定的域名的ip被记录和标记，然后通过iptables将其转发到redsocks转换的trojan代理，其他ip走默认路线。</p>
+</blockquote>
+<h2 id="opwnert下trojan透明代理教程">opwnert下trojan透明代理教程</h2>
+<h3 id="1-安装trojan开启转发">1、安装trojan开启转发</h3>
+<p>上一篇教程中我们编译了openwrt上的trojan ipk安装包，你若还没有编译，请参考这篇教程。</p>
+<p><a href="https://www.atrandys.com/2020/2324.html"><strong>编译及安装教程</strong>：openwrt上编译trojan ipk并安装</a></p>
+<p>开启转发</p>
+<pre><code>echo “net.ipv4.ip_forward=1” &gt;&gt; /etc/sysctl.conf
+
+sysctl -p
+</code></pre>
+<p>**PS：**这里一定注意修改/etc/config/trojan配置文件，将enabled改为1。</p>
+<h3 id="2-安装dnsmasq-full-ipset-dns-forwarder-redsocks">2、安装dnsmasq-full ipset dns-forwarder redsocks</h3>
+<p><strong>安装dnsmasq-full ipset redsocks</strong></p>
+<pre><code>opkg update
+opkg remove dnsmasq &amp;&amp; opkg install dnsmasq-full
+opkg install ipset iptables-mod-nat-extra redsocks
+</code></pre>
+<p><strong>安装dns-forwarder</strong></p>
+<p>首先我们看一下你的openwrt CPU架构</p>
+<pre><code>opkg print-architecture | awk '{print $2}' | grep -v all | grep -v noarch
+</code></pre>
+<p>然后去dns-forwarder网站下载对应架构的ipk：<a href="https://dl.bintray.com/aa65535/openwrt/dns-forwarder/1.2.1-2/current/">去下载dns-forwarder</a></p>
+<p>将dns-forwarder上传到openwrt或者直接wget下载，然后安装dns-forwarder</p>
+<pre><code>opkg install dns-forwarder*
+</code></pre>
+<h3 id="3-配置trojan">3、配置trojan</h3>
+<p>我们之前的教程中使用nohup运行trojan，今天我们使用配置trojan自启动，首先我们在trojan server端搭建时获取两个文件。</p>
+<blockquote>
+<p>/usr/src/trojan-cli/config.json<br>
+/usr/src/trojan-cli/fullchain.cer</p>
+</blockquote>
+<p>将这两个文件下载并重新命名config.json为trojan.json，然后将修改cert的值为/etc/fullchain.cer</p>
+<figure data-type="image" tabindex="1"><img src="https://hopol.cc.cd/post-images/1582923753763.png" alt="" loading="lazy"></figure>
+<p>然后将trojan.json和fullchain.cer上传到openwrt的/etc/目录下即可。</p>
+<p>开启trojan自启动</p>
+<pre><code>/etc/init.d/trojan enable
+</code></pre>
+<p>运行trojan</p>
+<pre><code>/etc/init.d/trojan start
+</code></pre>
+<h3 id="4-配置dns-forwarder">4、配置dns-forwarder</h3>
+<p>编辑dns-forwarder配置文件</p>
+<pre><code>vi /etc/config/dns-forwarder
+</code></pre>
+<p>修改内容如下，然后保存</p>
+<pre><code>config dns-forwarder
+option listen_addr '0.0.0.0'
+option listen_port '5353'
+option dns_servers '8.8.8.8'
+option enable '1'
+</code></pre>
+<p>重启dns-forwarder</p>
+<pre><code>/etc/init.d/dns-forwarder restart
+</code></pre>
+<h3 id="5-配置redsocks">5、配置redsocks</h3>
+<pre><code>cat &gt; /etc/redsocks.conf &lt;&lt;-EOF
+
+base {
+log_debug = off;
+log_info = on;
+log = &quot;syslog:local7&quot;;
+daemon = on;
+redirector = iptables;
+}
+
+redsocks {
+local_ip = 0.0.0.0;
+local_port = 12345;
+ip = 127.0.0.1;
+port = 1080;
+type = socks5;
+
+}
+
+EOF
+</code></pre>
+<p>然后重启redsocks</p>
+<pre><code>/etc/init.d/redsocks restart
+</code></pre>
+<h3 id="6-配置dnsmasq-ipset-iptables">6、配置dnsmasq、ipset、iptables</h3>
+<p>首先为dnsmasq的配置文件添加conf-dir</p>
+<pre><code>echo &quot;conf-dir=/etc/dnsmasq.d&quot; &gt;&gt; /etc/dnsmasq.conf
+</code></pre>
+<p>新建刚才添加的文件夹并进入</p>
+<pre><code>mkdir /etc/dnsmasq.d/ &amp;&amp; cd /etc/dnsmasq.d/
+</code></pre>
+<p>将配置好的gfwlist下载下来（注意，我把本站加入了代理，其他网站来源于github：gfwlist）</p>
+<pre><code>wget https://raw.githubusercontent.com/atrandys/gfwlist/master/gfwlist.conf
+</code></pre>
+<p>新建一个ipset gfwlist表</p>
+<pre><code>ipset -N gfwlist iphash
+</code></pre>
+<p>配置iptables将NAT转发到redsocks</p>
+<pre><code>iptables -t nat -A PREROUTING -p tcp -m set --match-set gfwlist dst -j REDIRECT --to-ports 12345
+</code></pre>
+<p>配置iptables将openwrt本机转发到redsocks</p>
+<pre><code>iptables -t nat -A OUTPUT -p tcp -m set --match-set gfwlist dst -j REDIRECT --to-ports 12345
+</code></pre>
+<p>配置TCP访问8.8.8.8的DNS解析流量走代理</p>
+<pre><code>iptables -t nat -A PREROUTING -p tcp -d 8.8.8.8/32 -j REDIRECT --to-ports 12345
+iptables -t nat -A OUTPUT -p tcp -d 8.8.8.8/32 -j REDIRECT --to-ports 12345
+</code></pre>
+<p>然后重启dnsmasq，用浏览器访问一下google，看一下透明代理是否生效吧。</p>
+<pre><code>/etc/init.d/dnsmasq restart 若需要配置以上规则开机自动添加，将以上ipset和iptables开头的5条命令逐行加入到/etc/firewall.user文件内容的末尾即可。
+</code></pre>
+<p>原帖：https://www.atrandys.com/2020/2343.html</p>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hopol.cc.cd/tag/tou-ming-dai-li/">
+            <span class="flex-auto">透明代理</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hopol.cc.cd/tag/openwrt/">
+            <span class="flex-auto">openwrt</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hopol.cc.cd/tag/trojan/">
+            <span class="flex-auto">trojan</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://hopol.cc.cd/post/fNkcW0Erf/">
+                <h3 class="post-title">
+                  openwrt使用trojan教程（一）：openwrt编译trojan ipk，支持tls1.3，使用openwrt sdk，速度快
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'c4a599757651e271978a',
+    clientSecret: 'bc88160b0789c4000d2c130d1ef66d8badc9c43a',
+    repo: 'hopol.github.io',
+    owner: 'hopol',
+    admin: ['hopol'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+      </div>
+    </div>
+
+    <script src="https://hopol.cc.cd/media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>

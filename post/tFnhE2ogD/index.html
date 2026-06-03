@@ -1,0 +1,359 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>流放之地</title>
+<meta name="description" content="我像一顆棋子，被上帝抓在手中，我看到她的眼，卻聽不到她的心。" />
+<link rel="shortcut icon" href="https://hopol.cc.cd/favicon.ico?v=1582923779422">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://hopol.cc.cd/styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://hopol.cc.cd">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://hopol.cc.cd/images/avatar.png?v=1582923779422" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">流放之地</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%85%8D%E7%BD%AEtrojan%E5%A4%9A%E7%94%A8%E6%88%B7%E6%96%B9%E6%B3%95">使用配置文件配置trojan多用户方法</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8mysql%E9%85%8D%E7%BD%AEtrojan%E5%A4%9A%E7%94%A8%E6%88%B7%E6%96%B9%E6%B3%95">使用mysql配置trojan多用户方法</a></li>
+<li><a href="#trojan%E5%A4%9A%E7%94%A8%E6%88%B7%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95">trojan多用户问题记录</a></li>
+<li><a href="#%E5%8E%9F%E5%B8%96%E5%9C%B0%E5%9D%80">原帖地址：</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="ri-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a></div>
+    <a class="rss" href="https://hopol.cc.cd/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">trojan多用户配置，简单模式+使用trojan_mysql高级模式，流量管理</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-02-21 / 4 min read
+        </div>
+        
+        <div class="post-content yue">
+          <p>trojan多用户的配置方法，有很多小伙伴问过，这里写一篇trojan多用户配置的教程，包含两种方法，一种是最简单的配置文件的多用户和一种使用到mysql数据库的多用户，这两种方法在trojan的官方文档里都有介绍，我来翻译一下白话文吧。</p>
+<p>两种方法说明</p>
+<blockquote>
+<p>1、配置文件多用户，只需在配置文件中多添加几个密码即可</p>
+<p>2、使用mysql的多用户，需要安装mysql，支持每个用户的流量管理</p>
+</blockquote>
+<h2 id="使用配置文件配置trojan多用户方法">使用配置文件配置trojan多用户方法</h2>
+<p>1、找到trojan的服务端配置文件server.conf，如果是使用本站一键脚本安装的，那么位置在/usr/src/trojan/server.conf</p>
+<p>2、修改server.conf，在password数组中添加多个值，如下图所示，一定要加引号，多个密码间注意使用英文逗号隔开，最后一个密码后无需加逗号</p>
+<figure data-type="image" tabindex="1"><img src="https://hopol.cc.cd/post-images/1582253571731.png" alt="" loading="lazy"></figure>
+<p>添加完成，保存文件，然后重启trojan或VPS</p>
+<p>重启trojan：systemctl restart trojan</p>
+<p>重启VPS：reboot</p>
+<h2 id="使用mysql配置trojan多用户方法">使用mysql配置trojan多用户方法</h2>
+<p>这种方法稍微复杂一些，其实这里可以开发出一个panel管理面板，大火酱好像有开发计划，这里咱们讲如何手动配置吧，以centos7为例。</p>
+<p>1、安装mysql，配置mysql用户名密码，新建trojan的user表</p>
+<p>mysql这里我们安装mysql5.*版本，比较好管理</p>
+<pre><code>wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+rpm -ivh mysql-community-release-el7-5.noarch.rpm
+yum -y install mysql-server
+systemctl enable mysqld.service
+systemctl start mysqld.service
+</code></pre>
+<p>然后配置mysql，创建数据库</p>
+<pre><code>mysql_secure_installation
+
+回车
+
+Y 回车
+
+输入新的root密码 回车
+
+再次输入root密码 回车
+
+Y 回车
+
+Y 回车
+
+Y 回车
+
+Y 回车
+</code></pre>
+<p>一路如上图操作，然后创建数据库</p>
+<pre><code>mysql -u root -p
+
+输入上一步设置的密码
+
+create database trojan;
+
+use trojan;
+
+创建users表
+
+CREATE TABLE users (
+id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+username VARCHAR(64) NOT NULL,
+password CHAR(56) NOT NULL,
+quota BIGINT NOT NULL DEFAULT 0,
+download BIGINT UNSIGNED NOT NULL DEFAULT 0,
+upload BIGINT UNSIGNED NOT NULL DEFAULT 0,
+PRIMARY KEY (id),
+INDEX (password)
+);
+exit;
+</code></pre>
+<p>2、修改trojan server配置文件，支持mysql并配置第一步的用户名密码</p>
+<p>trojan的server文件，如果是本站一键脚本，一般在/usr/src/trojan/server.conf下。修改如下图中的配置，将enabled改为true，将username改为root，password改为你设置的数据库密码</p>
+<figure data-type="image" tabindex="2"><img src="https://hopol.cc.cd/post-images/1582253597313.png" alt="" loading="lazy"></figure>
+<p>3、user表中增加用户名、密码、可用流量</p>
+<p>这一步我们需要在用户users表中插入用户信息，trojan会首先寻找server</p>
+<p>密码：需要sha224加密才可以，下面命令可以生成sha224加密后的密码</p>
+<pre><code>echo -n &quot;你的密码&quot; | sha224sum | awk '{print $1}'
+</code></pre>
+<p>可用流量：如果不限制就写一个负数，例如-100，如果需要限制，就填写一个数字，单位是B字节，所以如果是10G流量，那么就是10<em>1024</em>1024*1024，自己计算就可以了。</p>
+<p>然后连接mysql，然后insert into users，执行下面命令</p>
+<pre><code>mysql -u root -p
+
+输入mysql密码
+
+use trojan;
+
+insert into users (username, password, quota) values (&quot;user1&quot;, &quot;这里是sha224加密后的密码&quot;, 12342312312);
+
+exit;
+</code></pre>
+<p>然后测试能否正常访问即可；</p>
+<h2 id="trojan多用户问题记录">trojan多用户问题记录</h2>
+<p>trojan多用户的高级用法已经测试成功，但目前的问题是，如果trojan一直不断开，流量即使用超了也可以一直连接，只有等到下一次重新连接的时候才会限制生效。同样的道理，如果当前用户用完了流量，你在服务端增加了流量之后，用户也必须重新启动一下trojan才能生效。</p>
+<h2 id="原帖地址">原帖地址：</h2>
+<p>https://www.atrandys.com/2020/2269.html</p>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hopol.cc.cd/tag/mysql/">
+            <span class="flex-auto">mysql</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hopol.cc.cd/tag/duo-yong-hu/">
+            <span class="flex-auto">多用户</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://hopol.cc.cd/tag/trojan/">
+            <span class="flex-auto">trojan</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+            <div class="prev-post">
+              <a href="https://hopol.cc.cd/post/qKl-WVeOx/">
+                <h3 class="post-title">
+                  <i class="ri-arrow-left-line"></i>
+                  2020 年十大热门 BT 站
+                </h3>
+              </a>
+            </div>
+          
+
+          
+            <div class="next-post">
+              <a href="https://hopol.cc.cd/post/m7PuuiW1B/">
+                <h3 class="post-title">
+                  [备份]稳上加稳，trojan+haproxy本地负载均衡连接多条trojan服务端，高可用or分散流量多种模式
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'c4a599757651e271978a',
+    clientSecret: 'bc88160b0789c4000d2c130d1ef66d8badc9c43a',
+    repo: 'hopol.github.io',
+    owner: 'hopol',
+    admin: ['hopol'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+      </div>
+    </div>
+
+    <script src="https://hopol.cc.cd/media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>
